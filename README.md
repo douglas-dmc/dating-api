@@ -12,5 +12,8 @@ Projeto Dating-API (Node Express MongoDB)
 ## 4. Instalando o `nodemon` para reiniciar o servidor automaticamente após cada alteração no código
 - `npm install nodemon`
 
-## 5. Instalando o pacote `Dotenv` para manipular variáveis de ambiente
+## 5. Instalando o pacote `dotenv` para manipular variáveis de ambiente
 - `npm install dotenv`
+
+## 6. Instalando `cors` para restringir acesso entre domínios
+- `npm install cors`
