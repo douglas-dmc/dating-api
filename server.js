@@ -5,14 +5,13 @@ import Cards from "./dbCards.js"
 import "dotenv/config"
 
 // Variaveis de Ambiente
-const user = process.env.DB_USER
-const password = process.env.DB_PW
+const url = process.env.URL
 const porta = process.env.PORT
 
 // App Config
 const app = express()
 const port = porta || 8001
-const connection_url = `mongodb+srv://${user}:${password}@cluster0.czssres.mongodb.net/?retryWrites=true&w=majority`
+const connection_url = url
 
 // Middleware
 app.use(express.json())
