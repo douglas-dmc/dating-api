@@ -17,3 +17,6 @@ Projeto Dating-API (Node Express MongoDB)
 
 ## 6. Instalando `cors` para restringir acesso entre domínios
 - `npm install cors`
+
+## 7. Instalando `swagger-ui-express` e `swagger-jsdoc` para documentação da API
+- `npm install swagger-ui-express swagger-jsdoc`
