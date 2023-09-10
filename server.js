@@ -19,21 +19,26 @@ const port = porta || 8001
 const connection_url = url
 
 // swagger
-const swaggerAPIDesc = swaggerjsDoc({
+const swaggerOptions = {
     swaggerDefinition: {
+        openapi: "3.0.0",
         info: {
-            title: "API dating",
-            cersion: "1.0.0"
-        }
+            title: "API dating desenvolvida em Node.js e Express",
+            version: "1.0.0",
+            description: "Uma simples API para o app dating-app-mern",
+            contact: {
+                name: "Douglas M Costa",
+                email: "douglasmarques37@gmail.com",
+            },
+        },
     },
-    apis: ["server.js"]
-})
-
-const options = {
-    customCss: '.swagger-ui .topbar { display: none }'
+    apis: ["server.js"],
 }
 
-app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerAPIDesc, options))
+const swaggerDocs = swaggerjsDoc(swaggerOptions)
+console.log(swaggerDocs)
+
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs))
 
 // Middleware
 app.use(express.json())
@@ -49,30 +54,54 @@ mongoose.connect(connection_url, {
 app.get("/", (req, res) => res.status(200).send("Bem-vindo a API dating"))
 
 /**
-* @swagger
-* /dating/cards:
-*   post:
-*     description: Criando Cards
-*     requestBody:
-*       content: 
-*         application/json
-*     responses:
-*       201:
-*         description: Card Cadastrado!
-*       500:
-*         description: Card Não Cadastrado!
-*     parameters:
-*       - name: name
-*         in: application/json
-*         required: true
-*         type: string
-*         description: nome do card
-*       - name: imgUrl
-*         in: application/json
-*         required: true
-*         type: string
-*         description: url da imagem
-*/
+ * @swagger
+ * components:
+ *   schemas:
+ *     cards:
+ *       type: object
+ *       required:
+ *         - name
+ *         - imgUrl
+ *       properties:
+ *         name:
+ *           type: string
+ *           default: João Carlos
+ *         imgUrl:
+ *           type: string
+ *           default: http://localdaimagem
+ *     cardsResponse:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *         imgUrl:
+ *           type: string
+ */
+
+/**
+ * @swagger
+ * /dating/cards:
+ *    post:
+ *      summary: Criando Cards
+ *      description: Rota para criar um card
+ *      tags:
+ *        - Cards
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/cards'
+ *      responses:
+ *        201:
+ *          description: Card Cadastrado!
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/cardsResponse'
+ *        500:
+ *          description: Card Não Cadastrado!
+ */ 
 app.post("/dating/cards", async (req, res) => {
     const dbCard = req.body
 
@@ -85,16 +114,19 @@ app.post("/dating/cards", async (req, res) => {
 })
 
 /**
-* @swagger
-* /dating/cards:
-*   get:
-*     description: Listando os Cards
-*     responses: 
-*       200:
-*         description: Sucesso
-*       500:
-*         description: Servidor Não Encontrado
-*/
+ * @swagger
+ * /dating/cards:
+ *   get:
+ *     summary: Listando os Cards
+ *     description: Rota para listar todos os Cards
+ *     tags:
+ *       - Listagem
+ *     responses:
+ *       200:
+ *         description: Sucesso
+ *       500:
+ *         description: Servidor Não Encontrado
+ */
 app.get("/dating/cards", async (req, res) => {
     try {
         const data = await Cards.find()
