@@ -31,18 +31,26 @@ const swaggerOptions = {
                 email: "douglasmarques37@gmail.com",
             },
         },
+        servers: [
+            {
+                url: "http://localhost:8001",
+                description: "Servidor local"
+            }
+        ]
     },
     apis: ["server.js"],
 }
 
 const swaggerDocs = swaggerjsDoc(swaggerOptions)
-console.log(swaggerDocs)
 
-app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs))
+const corsOptions = {
+    origin: "http://localhost:5173"
+}
 
 // Middleware
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs))
 app.use(express.json())
-app.use(Cors())
+app.use(Cors(corsOptions))
 
 // DB Config
 mongoose.connect(connection_url, {
